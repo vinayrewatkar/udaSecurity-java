@@ -119,34 +119,50 @@ public class SecurityService {
      */
     public void changeSensorActivationStatus(Sensor sensor, Boolean active) {
         // If alarm is active, don't change status regardless of sensor state changes
-        if(securityRepository.getAlarmStatus() == AlarmStatus.ALARM) {
-            sensor.setActive(active);
-            securityRepository.updateSensor(sensor);
-            return;
-        }
+        boolean wasActive = sensor.getActive();
 
-        // If sensor is already active and is being set to active again while system is pending
-        if(sensor.getActive() && active && securityRepository.getAlarmStatus() == AlarmStatus.PENDING_ALARM) {
-            setAlarmStatus(AlarmStatus.ALARM);
-            sensor.setActive(active);
-            securityRepository.updateSensor(sensor);
-            return;
-        }
-
-        // If sensor is already inactive and is being set to inactive again, do nothing
-        if(!sensor.getActive() && !active) {
-            return;
-        }
-
-        // Handle normal activation/deactivation
-        if(!sensor.getActive() && active) {
-            handleSensorActivated();
-        } else if(sensor.getActive() && !active) {
-            handleSensorDeactivated();
-        }
-
+        // Update the sensor's state
         sensor.setActive(active);
         securityRepository.updateSensor(sensor);
+
+        // Get current system status
+        AlarmStatus currentStatus = securityRepository.getAlarmStatus();
+
+        // If alarm is active, sensor state should not affect the alarm state
+        if (currentStatus == AlarmStatus.ALARM) {
+            return;
+        }
+
+        // If system pending alarm and this sensor becomes active or was already active and is reactivated
+        if (currentStatus == AlarmStatus.PENDING_ALARM) {
+            if (active) {
+                securityRepository.setAlarmStatus(AlarmStatus.ALARM);
+                return;
+            } else {
+                // Check if all sensors are now inactive
+                boolean allSensorsInactive = true;
+                for (Sensor s : securityRepository.getSensors()) {
+                    if (s.getActive()) {
+                        allSensorsInactive = false;
+                        break;
+                    }
+                }
+
+                // If all sensors are inactive, set to no alarm
+                if (allSensorsInactive) {
+                    securityRepository.setAlarmStatus(AlarmStatus.NO_ALARM);
+                    return;
+                }
+            }
+        }
+
+        // If sensor becomes active while system is armed and not in pending/alarm state
+        if (!wasActive && active &&
+                (securityRepository.getArmingStatus() == ArmingStatus.ARMED_HOME ||
+                        securityRepository.getArmingStatus() == ArmingStatus.ARMED_AWAY) &&
+                currentStatus == AlarmStatus.NO_ALARM) {
+            securityRepository.setAlarmStatus(AlarmStatus.PENDING_ALARM);
+        }
     }
 
     /**

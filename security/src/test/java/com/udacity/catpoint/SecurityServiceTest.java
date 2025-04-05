@@ -62,7 +62,9 @@ public class SecurityServiceTest {
     @ParameterizedTest
     @EnumSource(value = ArmingStatus.class, names = {"ARMED_HOME", "ARMED_AWAY"})
     void ifAlarmIsArmedAndSensorActivatedAndStatusPending_changeStatusToAlarm(ArmingStatus armingStatus) {
-        when(securityRepository.getArmingStatus()).thenReturn(armingStatus);
+        // Remove this line since it's not being used:
+        // when(securityRepository.getArmingStatus()).thenReturn(armingStatus);
+
         when(securityRepository.getAlarmStatus()).thenReturn(AlarmStatus.PENDING_ALARM);
 
         securityService.changeSensorActivationStatus(sensor, true);
