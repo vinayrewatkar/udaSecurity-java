@@ -45,7 +45,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Testing dependencies -->
             <!-- JUnit 5 API and Engine -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -111,7 +110,6 @@
                         </includes>
                     </configuration>
                 </plugin>
-                <!-- Other plugins -->
             </plugins>
         </pluginManagement>
     </build>

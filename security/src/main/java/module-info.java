@@ -9,8 +9,4 @@ module com.udacity.catpoint.security {
     requires jdk.unsupported;
     requires java.prefs;
     opens com.udacity.catpoint.data to com.google.gson;
-
-    exports com.udacity.catpoint.application;
-    exports com.udacity.catpoint.data;
-    exports com.udacity.catpoint.service;
 }

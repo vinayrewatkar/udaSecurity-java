@@ -117,4 +117,12 @@ public class SensorPanel extends JPanel {
         securityService.removeSensor(sensor);
         updateSensorList(sensorListPanel);
     }
+    public void sensorStatusChanged() {
+        // Force UI refresh
+        SwingUtilities.invokeLater(() -> {
+            removeAll();
+            revalidate();
+            repaint();
+        });
+    }
 }

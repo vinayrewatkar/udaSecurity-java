@@ -8,7 +8,6 @@ module com.udacity.catpoint.image {
     // For AWS SDK to work properly
     requires transitive java.logging;
     requires transitive java.net.http;
-    requires transitive jdk.crypto.ec;
     requires transitive jdk.unsupported;
     requires org.slf4j;
 

@@ -10,38 +10,31 @@ public class FakeImageService implements ImageService {
     @Override
     public boolean imageContainsCat(BufferedImage image) {
         // If image is null, return false
-        if (image == null) {
-            return false;
-        }
+        if (image == null) return false;
 
-        // For a fake service, you can use some simple heuristic
-        // For example, checking if the image has certain color patterns that might be common in cat images
-        // This is just a simple example - a real implementation would be more sophisticated
-        int height = image.getHeight();
+        // Check for orange/brown pixels (simulate cat detection)
         int width = image.getWidth();
+        int height = image.getHeight();
 
-        // If the image is very small, it's unlikely to be a meaningful cat image
-        if (height < 10 || width < 10) {
-            return false;
-        }
+        // Sample 10% of pixels
+        int sampleCount = (width * height) / 10;
+        int catPixels = 0;
 
-        // Sample the image to see if it contains orange/brown colors common in some cats
-        int orangeBrownPixels = 0;
-        for (int y = 0; y < height; y += height/10) {
-            for (int x = 0; x < width; x += width/10) {
-                int pixel = image.getRGB(x, y);
-                int red = (pixel >> 16) & 0xff;
-                int green = (pixel >> 8) & 0xff;
-                int blue = pixel & 0xff;
+        for (int i = 0; i < sampleCount; i++) {
+            int x = (int) (Math.random() * width);
+            int y = (int) (Math.random() * height);
+            int rgb = image.getRGB(x, y);
 
-                // Rough check for orange/brown color range
-                if (red > 200 && green > 100 && green < 200 && blue < 100) {
-                    orangeBrownPixels++;
-                }
+            // Detect orange/brown range
+            int red = (rgb >> 16) & 0xFF;
+            int green = (rgb >> 8) & 0xFF;
+            int blue = rgb & 0xFF;
+
+            if (red > 150 && green > 50 && green < 200 && blue < 100) {
+                catPixels++;
             }
         }
 
-        // If a certain percentage of sampled pixels are in the orange/brown range, assume it might be a cat
-        return orangeBrownPixels > ((height * width) / 100);
+        return catPixels > (sampleCount / 4);
     }
 }

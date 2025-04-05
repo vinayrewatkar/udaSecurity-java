@@ -23,82 +23,86 @@ public class SecurityService {
     }
 
     public void setArmingStatus(ArmingStatus armingStatus) {
-        // Handle disarmed case first
+        // Always reset alarm when disarming
         if (armingStatus == ArmingStatus.DISARMED) {
             setAlarmStatus(AlarmStatus.NO_ALARM);
-            securityRepository.setArmingStatus(armingStatus);
-            return;
-        }
+        } else {
+            // Reset all sensors and handle cat detection
+            resetAllSensors();
 
-        // Handle armed cases
-        // Reset all sensors when arming
-        Set<Sensor> sensorsCopy = new HashSet<>(getSensors());
-        sensorsCopy.forEach(sensor -> {
-            sensor.setActive(false);
-            securityRepository.updateSensor(sensor);
-        });
-
-        // Special case for armed-home with cat detected
-        if (armingStatus == ArmingStatus.ARMED_HOME && catDetected) {
-            setAlarmStatus(AlarmStatus.ALARM);
+            // Special case: Arming to HOME with cat detected
+            if (armingStatus == ArmingStatus.ARMED_HOME && catDetected) {
+                setAlarmStatus(AlarmStatus.ALARM);
+            }
         }
 
         securityRepository.setArmingStatus(armingStatus);
+        notifyArmingStatusChanged(armingStatus); // Add this line
+    }
+
+    private void resetAllSensors() {
+        new HashSet<>(getSensors()).forEach(sensor -> {
+            sensor.setActive(false);
+            securityRepository.updateSensor(sensor);
+        });
+    }
+
+    public void processImage(BufferedImage image) {
+        if (image == null) {
+            // Only notify listeners without changing alarm status
+            catDetected = false;
+            statusListeners.forEach(sl -> sl.catDetected(false));
+            return;
+        }
+
+        boolean currentCatDetected = imageService.imageContainsCat(image);
+        this.catDetected = currentCatDetected;
+        statusListeners.forEach(sl -> sl.catDetected(currentCatDetected));
+
+        if (currentCatDetected && getArmingStatus() == ArmingStatus.ARMED_HOME) {
+            setAlarmStatus(AlarmStatus.ALARM);
+        } else if (!currentCatDetected && allSensorsInactive()) {
+            setAlarmStatus(AlarmStatus.NO_ALARM);
+        }
     }
 
     public void changeSensorActivationStatus(Sensor sensor, Boolean active) {
-        // If alarm is active, ignore all sensor changes
-        if (securityRepository.getAlarmStatus() == AlarmStatus.ALARM) {
-            return;
-        }
+        // Block changes if alarm is active
+        if (getAlarmStatus() == AlarmStatus.ALARM) return;
 
         boolean wasActive = sensor.getActive();
         sensor.setActive(active);
         securityRepository.updateSensor(sensor);
 
-        AlarmStatus alarmStatus = securityRepository.getAlarmStatus();
-        ArmingStatus armingStatus = securityRepository.getArmingStatus();
+        handleSensorStateChange(active, wasActive);
+    }
 
-        // Handle sensor activation
+    private void handleSensorStateChange(boolean active, boolean wasActive) {
+        AlarmStatus status = getAlarmStatus();
+        ArmingStatus arming = getArmingStatus();
+
         if (active) {
-            handleSensorActivated(armingStatus, alarmStatus);
+            if (arming != ArmingStatus.DISARMED) {
+                if (status == AlarmStatus.NO_ALARM) {
+                    setAlarmStatus(AlarmStatus.PENDING_ALARM);
+                } else if (status == AlarmStatus.PENDING_ALARM) {
+                    setAlarmStatus(AlarmStatus.ALARM);
+                }
+            }
         } else {
-            handleSensorDeactivated(alarmStatus);
+            if (status == AlarmStatus.PENDING_ALARM && allSensorsInactive()) {
+                setAlarmStatus(AlarmStatus.NO_ALARM);
+            }
         }
     }
 
-    private void handleSensorActivated(ArmingStatus armingStatus, AlarmStatus alarmStatus) {
-        if (armingStatus == ArmingStatus.DISARMED) {
-            return;
-        }
-
-        switch (alarmStatus) {
-            case NO_ALARM -> setAlarmStatus(AlarmStatus.PENDING_ALARM);
-            case PENDING_ALARM -> setAlarmStatus(AlarmStatus.ALARM);
-        }
+    // Add missing notifiers
+    private void notifyCatDetection(boolean detected) {
+        statusListeners.forEach(sl -> sl.catDetected(detected));
     }
 
-    private void handleSensorDeactivated(AlarmStatus alarmStatus) {
-        if (alarmStatus == AlarmStatus.PENDING_ALARM && !areAnySensorsActive()) {
-            setAlarmStatus(AlarmStatus.NO_ALARM);
-        }
-    }
-
-    public void processImage(BufferedImage image) {
-        boolean currentCatDetected = image != null && imageService.imageContainsCat(image);
-        this.catDetected = currentCatDetected;
-        notifyCatDetection(currentCatDetected);
-
-        // Handle alarm status based on cat detection
-        if (currentCatDetected && securityRepository.getArmingStatus() == ArmingStatus.ARMED_HOME) {
-            setAlarmStatus(AlarmStatus.ALARM);
-        } else if (!currentCatDetected && !areAnySensorsActive()) {
-            setAlarmStatus(AlarmStatus.NO_ALARM);
-        }
-    }
-
-    private void notifyCatDetection(boolean catDetected) {
-        statusListeners.forEach(sl -> sl.catDetected(catDetected));
+    private void notifyArmingStatusChanged(ArmingStatus status) {
+        statusListeners.forEach(sl -> sl.sensorStatusChanged());
     }
 
     public void setAlarmStatus(AlarmStatus status) {
