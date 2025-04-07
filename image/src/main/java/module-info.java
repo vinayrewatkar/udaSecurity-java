@@ -12,4 +12,5 @@ module com.udacity.catpoint.image {
     requires org.slf4j;
 
     exports com.udacity.catpoint.image;
+    opens com.udacity.catpoint.image to org.junit.platform.commons;
 }

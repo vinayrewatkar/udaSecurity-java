@@ -40,7 +40,7 @@ public class SecurityService {
         notifyArmingStatusChanged(armingStatus); // Add this line
     }
 
-    private void resetAllSensors() {
+    public void resetAllSensors() {
         new HashSet<>(getSensors()).forEach(sensor -> {
             sensor.setActive(false);
             securityRepository.updateSensor(sensor);
@@ -77,7 +77,7 @@ public class SecurityService {
         handleSensorStateChange(active, wasActive);
     }
 
-    private void handleSensorStateChange(boolean active, boolean wasActive) {
+    public void handleSensorStateChange(boolean active, boolean wasActive) {
         AlarmStatus status = getAlarmStatus();
         ArmingStatus arming = getArmingStatus();
 
@@ -97,11 +97,11 @@ public class SecurityService {
     }
 
     // Add missing notifiers
-    private void notifyCatDetection(boolean detected) {
+    public void notifyCatDetection(boolean detected) {
         statusListeners.forEach(sl -> sl.catDetected(detected));
     }
 
-    private void notifyArmingStatusChanged(ArmingStatus status) {
+    public void notifyArmingStatusChanged(ArmingStatus status) {
         statusListeners.forEach(sl -> sl.sensorStatusChanged());
     }
 
@@ -118,11 +118,11 @@ public class SecurityService {
         statusListeners.remove(statusListener);
     }
 
-    private boolean areAnySensorsActive() {
+    public boolean areAnySensorsActive() {
         return getSensors().stream().anyMatch(Sensor::getActive);
     }
 
-    private boolean allSensorsInactive() {
+    public boolean allSensorsInactive() {
         return !areAnySensorsActive();
     }
 
@@ -144,5 +144,8 @@ public class SecurityService {
 
     public ArmingStatus getArmingStatus() {
         return securityRepository.getArmingStatus();
+    }
+    public Set<StatusListener> getStatusListeners() {
+        return new HashSet<>(statusListeners);
     }
 }

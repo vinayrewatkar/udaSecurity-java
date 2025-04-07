@@ -10,6 +10,8 @@ import java.util.UUID;
  * Sensor POJO. Needs to know how to sort itself for display purposes.
  */
 public class Sensor implements Comparable<Sensor> {
+    public static SensorType DoorWindow;
+    public static SensorType Motion;
     private UUID sensorId;
     private String name;
     private Boolean active;

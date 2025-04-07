@@ -1,9 +1,8 @@
-package com.udacity.catpoint;
+package com.udacity.catpoint.service;
 
 import com.udacity.catpoint.application.StatusListener;
 import com.udacity.catpoint.data.*;
 import com.udacity.catpoint.image.ImageService;
-import com.udacity.catpoint.service.SecurityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,7 +11,6 @@ import org.junit.jupiter.params.provider.EnumSource;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,7 +38,7 @@ public class SecurityServiceTest {
         catImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
         nonCatImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
     }
-    
+
 
     // ========== setArmingStatus() Tests ==========
     @Test

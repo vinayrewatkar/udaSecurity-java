@@ -1,0 +1,61 @@
+-------------------------------------------------------------------------------
+Test set: com.udacity.catpoint.service.SecurityServiceTest
+-------------------------------------------------------------------------------
+Tests run: 19, Failures: 0, Errors: 19, Skipped: 0, Time elapsed: 0.161 s <<< FAILURE! - in com.udacity.catpoint.service.SecurityServiceTest
+com.udacity.catpoint.service.SecurityServiceTest.setArmingStatus_armedHomeWithCat_setsAlarm  Time elapsed: 0.002 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.setArmingStatus_armed_resetsAllSensors(ArmingStatus)[1]  Time elapsed: 0.002 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.setArmingStatus_armed_resetsAllSensors(ArmingStatus)[2]  Time elapsed: 0.001 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.removeSensor_removesFromRepository  Time elapsed: 0.01 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.processImage_noCatWithInactiveSensors_setsNoAlarm  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.removeStatusListener_removesListener  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.processImage_catDetectedWhileArmedHome_setsAlarm  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.notifyCatDetection_notifiesAllListeners  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.changeSensorActivationStatus_allInactiveWhilePending_setsNoAlarm  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.processImage_nullImage_notifiesNoCat  Time elapsed: 0.011 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.changeSensorActivationStatus_secondActiveWhilePending_setsAlarm  Time elapsed: 0.005 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.changeSensorActivationStatus_activeWhileArmed_setsPendingAlarm  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.addSensor_addsToRepository  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.areAnySensorsActive_returnsTrueWhenActive  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.setArmingStatus_disarmed_setsNoAlarm  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.allSensorsInactive_returnsTrueWhenNoneActive  Time elapsed: 0.01 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.notifyArmingStatusChanged_notifiesAllListeners  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.getStatusListeners_returnsCopy  Time elapsed: 0 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
+com.udacity.catpoint.service.SecurityServiceTest.addStatusListener_addsListener  Time elapsed: 0.008 s  <<< ERROR!
+java.lang.reflect.InaccessibleObjectException: Unable to make void com.udacity.catpoint.service.SecurityServiceTest.init() accessible: module com.udacity.catpoint.security does not "opens com.udacity.catpoint.service" to unnamed module @175b9425
+
