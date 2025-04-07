@@ -8,7 +8,11 @@ module com.udacity.catpoint.security {
     // Required for Guava
     requires jdk.unsupported;
     requires java.prefs;
+
+    // Open packages for serialization
     opens com.udacity.catpoint.data to com.google.gson;
-    opens com.udacity.catpoint.service to org.junit.platform.commons; // main package
-    opens com.udacity.catpoint.application to org.junit.platform.commons;
+
+    // Open ALL packages unconditionally for testing
+    opens com.udacity.catpoint.service;
+    opens com.udacity.catpoint.application;
 }

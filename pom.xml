@@ -20,6 +20,7 @@
         <maven.compiler.compilerArgs>--enable-preview</maven.compiler.compilerArgs>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <awsVersion>2.17.52</awsVersion>
+        <spotbugs.version>4.7.3.0</spotbugs.version>
     </properties>
 
     <dependencyManagement>
@@ -82,7 +83,6 @@
                 <version>5.8.2</version>
                 <scope>test</scope>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -99,19 +99,92 @@
                         <enablePreview>true</enablePreview>
                     </configuration>
                 </plugin>
+
                 <!-- Surefire Plugin -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M5</version> <!-- JUnit 5 support -->
+                    <version>3.0.0-M5</version>
                     <configuration>
                         <includes>
                             <include>**/*Test.java</include>
                         </includes>
+                        <argLine>--add-opens com.udacity.catpoint.security/com.udacity.catpoint=ALL-UNNAMED</argLine>
                     </configuration>
+                </plugin>
+
+                <!-- Shade Plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.2.4</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                            <configuration>
+                                <transformers>
+                                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <mainClass>com.udacity.catpoint.application.CatpointApp</mainClass>
+                                    </transformer>
+                                </transformers>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <!-- Active plugins -->
+        <plugins>
+            <!-- SpotBugs Plugin -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs.version}</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Medium</threshold>
+                    <failOnError>true</failOnError>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs.version}</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <outputDirectory>${project.build.directory}/site</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spotbugs</id>
+            <name>SpotBugs Maven Repository</name>
+            <url>https://spotbugs.github.io/maven</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
