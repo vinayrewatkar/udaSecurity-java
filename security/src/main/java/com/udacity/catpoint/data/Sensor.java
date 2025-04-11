@@ -23,6 +23,12 @@ public class Sensor implements Comparable<Sensor> {
         this.sensorId = UUID.randomUUID();
         this.active = Boolean.FALSE;
     }
+    public Sensor() {
+        // Default initialization
+        this.sensorId = UUID.randomUUID();
+        this.active = Boolean.FALSE;
+        // name and sensorType will be set by Gson during deserialization
+    }
 
     @Override
     public boolean equals(Object o) {

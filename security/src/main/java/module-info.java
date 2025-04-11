@@ -1,18 +1,13 @@
 module com.udacity.catpoint.security {
-    requires com.udacity.catpoint.image;
+    requires transitive com.udacity.catpoint.image;
+    requires transitive com.miglayout.swing;
     requires java.desktop;
-    requires com.google.gson;
-    requires com.google.common;
-    requires miglayout.swing;
-
-    // Required for Guava
-    requires jdk.unsupported;
     requires java.prefs;
+    requires transitive com.google.gson;
+    requires transitive dev.mccue.guava.collect;
+    requires transitive dev.mccue.guava.reflect;
+    requires com.google.common;
 
-    // Open packages for serialization
-    opens com.udacity.catpoint.data to com.google.gson;
+    opens com.udacity.catpoint.data;
 
-    // Open ALL packages unconditionally for testing
-    opens com.udacity.catpoint.service;
-    opens com.udacity.catpoint.application;
 }
